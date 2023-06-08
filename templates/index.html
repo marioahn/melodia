@@ -1,4 +1,4 @@
-p<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -6,11 +6,11 @@ p<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 
     <title>Melodia</title>
 
@@ -25,7 +25,7 @@ p<!doctype html>
             width: 100%;
             height: 250px;
 
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg');
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://video-images.vice.com/articles/62cc310559c0d1009c0212e8/lede/1657549151452-lofo.jpeg');
             background-position: center;
             background-size: cover;
 
@@ -37,7 +37,7 @@ p<!doctype html>
             justify-content: center;
         }
 
-        .mytitle > button {
+        .mytitle>button {
             width: 200px;
             height: 50px;
 
@@ -50,7 +50,7 @@ p<!doctype html>
             margin-top: 10px;
         }
 
-        .mytitle > button:hover {
+        .mytitle>button:hover {
             border: 2px solid white;
         }
 
@@ -61,7 +61,21 @@ p<!doctype html>
         .mycards {
             margin: 20px auto 0px auto;
             width: 95%;
-            max-width: 1200px;
+            max-width: 700px;
+
+        }
+        th,
+        td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
         .mypost {
@@ -74,6 +88,7 @@ p<!doctype html>
             display: none;
         }
 
+
         .mybtns {
             display: flex;
             flex-direction: row;
@@ -82,66 +97,110 @@ p<!doctype html>
 
             margin-top: 20px;
         }
+
         .mybtns > button {
             margin-right: 10px;
         }
+
     </style>
     <script>
-        $(document).ready(function(){
+        // modal event(button click)
+        let tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/player_api";
+        let firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        let player;
+
+        $(document).ready(function() {  
             listing();
+            $("#btn_play").click(function(){
+                //let vod_url = $("#vod_url").val();
+                //if(vod_url.indexOf("https://youtu.be/") != -1){
+                   // let ff_url = vod_url.replace("https://youtu.be/", '');
+                   // $("#player").prop("src", "https://www.youtube.com/embed/" + ff_url);
+                   // player = new YT.Player('player', {
+                  //      events: {
+                //            'onReady': function (event) {
+                       //         event.target.playVideo();
+                     //       }
+                   //     }
+                 //   });
+                    console.log(1)
+                    $("#modal_8").modal("show");
+                //}else{
+                //    alert("URL 형식이 올바르지 않습니다.");
+                //}
+            });
         });
+
+        //$(document).ready(function () {
+            
+        //});
+
+        function temp() {
+            console.log('check')
+        }
 
         function listing() {
             fetch('/melodia').then((res) => res.json()).then((data) => {
                 let rows = data['result']
-                $('#cards-box').empty()
+                //$('.table-under').empty()
                 rows.forEach((a) => {
                     let title = a['title']
                     let image = a['image']
-                    let comment = a['comment']
+                    let mv = a['mv']
                     let star = a['star']
+                    let comment = a['comment']
 
                     let star_repeat = '⭐'.repeat(star)
-
-                    let temp_html = `<div class="col">
-                                        <div class="card h-100">
-                                            <img src="${image}"
-                                                class="card-img-top">
-                                            <div class="card-body">
-                                                <h5 class="card-title">${title}</h5>
-                                                <p>${star_repeat}</p>
-                                                <p class="mycomment">${comment}</p>
+                    
+                    let temp_html = `<tr>
+                                        <th scope="row">
+                                            <img src="${image}" class="card-img-top" style="display: block; margin: 0 auto; width:100px; height:100px;">
+                                        </th>
+                                        <td>${title}</td>
+                                        <td>
+                                            <div style="margin-top:30px;">
+                                                <input type="text" id="vod_url" name="vod_url" value="${mv}" style="width:300px;">
+                                                <button type="button" id="btn_play" class="btn btn-success" name="btn_play">재생</button>
                                             </div>
-                                        </div>
-                                    </div>`
-                    $('#cards-box').append(temp_html)
+                                        </td>
+                                        <td>${star_repeat}</td>
+                                        <td>${comment}</td>
+                                    </tr>`
+
+                    //console.log(temp_html)
+                    $('.table-under').append(temp_html)
                 })
+
             })
         }
 
         function posting() {
-            
-            let url = $('#url').val()
-            let comment = $('#comment').val()
-            let star = $('#star').val()
 
-		    let formData = new FormData();
+            let url = $('#url').val()
+            let mv = $('#mv').val()
+            let star = $('#star').val()
+            let comment = $('#comment').val()
+
+            let formData = new FormData();
 
             formData.append("url_give", url);
-            formData.append("comment_give", comment);
+            formData.append("mv_give", mv);
             formData.append("star_give", star);
+            formData.append("comment_give", comment);
 
-            fetch('/melodia', {method : "POST",body : formData}).then((res) => res.json()).then((data) => {
-            console.log(data)
-            alert(data['msg'])
-            window.location.reload() 
+            fetch('/melodia', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
+                console.log(data)
+                alert(data['msg'])
+                window.location.reload()
             })
         }
 
-        function open_box(){
+        function open_box() {
             $('#post-box').show()
         }
-        function close_box(){
+        function close_box() {
             $('#post-box').hide()
         }
     </script>
@@ -149,74 +208,86 @@ p<!doctype html>
 
 <body>
     <div class="mytitle">
-        <h1>내 생애 최고의 영화들</h1>
-        <button onclick="open_box()">영화 기록하기</button>
+        <h1>M e l o d i a ♬</h1>
+        <button onclick="open_box()">노래 기록하기</button>
     </div>
     <div class="mypost" id="post-box">
         <div class="form-floating mb-3">
             <input id="url" type="email" class="form-control" placeholder="name@example.com">
-            <label>영화URL</label>
+            <label>멜론 사이트 URL</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input id="mv" type="email" class="form-control" placeholder="name@example.com">
+            <label>뮤직비디오 유튜브 URL</label>
         </div>
         <div class="input-group mb-3">
-        <label class="input-group-text" for="inputGroupSelect01">별점</label>
-        <select class="form-select" id="star">
-            <option selected>-- 선택하기 --</option>
-            <option value="1">⭐</option>
-            <option value="2">⭐⭐</option>
-            <option value="3">⭐⭐⭐</option>
-            <option value="4">⭐⭐⭐⭐</option>
-            <option value="5">⭐⭐⭐⭐⭐</option>
-        </select>
+            <label class="input-group-text" for="inputGroupSelect01">별점</label>
+            <select class="form-select" id="star">
+                <option selected>-- 선택하기 --</option>
+                <option value="1">⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="5">⭐⭐⭐⭐⭐</option>
+            </select>
         </div>
         <div class="form-floating">
             <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
             <label for="floatingTextarea2">코멘트</label>
         </div>
         <div class="mybtns">
-            <button onclick="posting()" type="button" class="btn btn-dark">기록하기</button>
+            <button onclick="posting()" type="button" class="btn btn-outline-success">기록하기</button>
             <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
         </div>
     </div>
     <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
-            <div class="col">
-                <div class="card h-100">
-                    <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
-                        class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">영화 제목이 들어갑니다</h5>
-                        <p class="card-text">여기에 영화에 대한 설명이 들어갑니다.</p>
-                        <p>⭐⭐⭐</p>
-                        <p class="mycomment">나의 한줄 평을 씁니다</p>
-                    </div>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <table class="table table-light table-bordered border-dark">
+                <thead>
+                    <tr>
+                        <th scope="col" style="text-align:center">앨범 사진</th>
+                        <th scope="col" style="text-align:center">제목 - 가수</th>
+                        <th scope="col" style="text-align:center">재생하기</th>
+                        <th scope="col" style="text-align:center">별점주기</th>
+                        <th scope="col" style="text-align:center">나의평가</th>
+                    </tr>
+                </thead>
+                <tbody class="table-under">
+                    <tr>
+                        <th scope="row"><img
+                                src="https://img.khan.co.kr/news/2011/12/22/20111223.01200129000005.01M.webp"
+                                class="card-img-top" style="display: block; margin: 0 auto; width:100px; height:100px;">
+                        <td>좋은 날 - 아이유(더미 데이터)</td>
+                        <td>
+                            <div style="margin-top:30px;">
+                                <input type="text" id="vod_url" name="vod_url" value="https://youtu.be/jeqdYqsrsA0" style="width:300px;">
+                                <button type="button"  id="btn_play" class="btn btn-success" name="btn_play">재생</button>
+                            </div>
+                        </td>
+                        <td>⭐⭐⭐</td>
+                        <td>잘 들었습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+    <div class="modal" id="modal_8" tabindex="-1" role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:530px;">
+            <div class="modal-content" style="border-top-color: #CCC!important;border-top: solid 1px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">뮤직 비디오</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
-                    class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">영화 제목이 들어갑니다</h5>
-                        <p class="card-text">여기에 영화에 대한 설명이 들어갑니다.</p>
-                        <p>⭐⭐⭐</p>
-                        <p class="mycomment">나의 한줄 평을 씁니다</p>
-                    </div>
+                <div class="modal-body">
+                    <iframe id="player" type="text/html" width="460px;" height="300px;" src=""></iframe>
                 </div>
-            </div>
-            <div class="col">
-                <div class="card h-100">
-                    <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
-                    class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">영화 제목이 들어갑니다</h5>
-                        <p class="card-text">여기에 영화에 대한 설명이 들어갑니다.</p>
-                        <p>⭐⭐⭐</p>
-                        <p class="mycomment">나의 한줄 평을 써라</p>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
     </div>
-</body>
 
-</html>
+</body>

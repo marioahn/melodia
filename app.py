@@ -12,12 +12,11 @@ from bs4 import BeautifulSoup
 def home():
 	return render_template('index.html')
 
-# 크롤링해서 가져올 것: 발매일, 장르
+# 입력: 멜론 주소(크롤링) + 유튜브(MV) 링크 + 별점 + 코멘트
 @app.route("/melodia", methods=["POST"])
 def melodia_post():
-    url_receive = request.form['url_give'] # = img_receive = request.form['img_receive']
-    # title_receive = request.form['title_receive']
-    # artist_receive = request.form['artist_receive']
+    url_receive = request.form['url_give'] # 멜론 링크 = 앨범이미지, 제목+가수
+    mv_receive = request.form['mv_give']
     comment_receive = request.form['comment_give']
     star_receive = request.form['star_give']
 
@@ -31,9 +30,11 @@ def melodia_post():
     doc = {
 	    'title': ogtitle,
 	    'image': ogimage,
+        
         'url': url_receive,
+        'mv': mv_receive,
 	    'comment': comment_receive,
-        'star': star_receive # 일단 5개로 받고 처리
+        'star': star_receive
     }
     db.melodia.insert_one(doc) 
 
