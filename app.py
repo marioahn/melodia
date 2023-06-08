@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 def home():
 	return render_template('index.html')
 
-# API.1
+# 크롤링해서 가져올 것: 발매일, 장르
 @app.route("/melodia", methods=["POST"])
 def melodia_post():
     url_receive = request.form['url_give'] # = img_receive = request.form['img_receive']
@@ -25,17 +25,13 @@ def melodia_post():
     data = requests.get(url_receive,headers=headers) # url을 위에서 만든 url_receive 변수로 교체
     soup = BeautifulSoup(data.text, 'html.parser')
 
-    ogtitle = soup.select_one('meta[property="og:title"]')['content']
+    ogtitle = soup.select_one('meta[property="og:title"]')['content'] # title+artist
     ogimage = soup.select_one('meta[property="og:image"]')['content']
-    ogdesc = soup.select_one('meta[property="og:description"]')['content']
 
     doc = {
 	    'title': ogtitle,
-	    'desc': ogdesc,
 	    'image': ogimage,
-        'url': url_receive, # 'img': img_receive,
-        # 'title': title_receive,
-        # 'artist': artist_receive,
+        'url': url_receive,
 	    'comment': comment_receive,
         'star': star_receive # 일단 5개로 받고 처리
     }
